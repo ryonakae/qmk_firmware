@@ -15,38 +15,137 @@
  */
 #include QMK_KEYBOARD_H
 
-#define _BASE 0
-#define _NUMS 1
-#define _SYMS 2
-#define _FUNC 3
+extern keymap_config_t keymap_config;
 
-#define KC______ KC_TRNS
-#define KC_XXXXX KC_NO
-#define KC_RST   RESET
+#define _QWERTY 0
+#define _LOWER 1
+#define _RAISE 2
+#define _ADJUST 16
+
+enum custom_keycodes {
+  QWERTY = SAFE_RANGE,
+  LOWER_V,
+  RAISE_N,
+  ADJUST,
+};
+
+#define KC______  KC_TRNS
+#define KC_XXXXX  KC_NO
+#define KC_RST    RESET
+#define KC_LOWV   LOWER_V
+#define KC_RAIN   RAISE_N
+#define KC_CTLTB  CTL_T(KC_TAB)
+#define KC_CTL_TB LCTL(KC_TAB)
+#define KC_SFTESC SFT_T(KC_ESC)
+#define KC_ALTZ   ALT_T(KC_Z)
+#define KC_LCMDX  LGUI_T(KC_X)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_BASE] = LAYOUT_kc(
-          //|--------------------------------------------------------------------------.
+  [_QWERTY] = LAYOUT_kc(
+        KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
+        KC_LCTL, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_ENT,
+        KC_LSFT, LALT_T(KC_Z), LGUI_T(KC_X), KC_C, LT(_SYMS, KC_V), LT(_FUNC, KC_B), LT(_NUMS, KC_N), KC_M, KC_SPC
+        //|----------------------------------------------------------------------------.
                 Q,     W,     E,     R,     T,     Y,     U,     I,     O,     P,  BSPC,\
-    //|----------+------+------+------+------+------+------+------+------+------+------|
-         LCTL,     A,     S,     D,     F,     G,     H,     J,     K,     L,       ENT,\
-    //|------+------+------+------+------+------+------+------+------+------+----------|
-             LSFT,     Z,     X,     C,     V,     B,     N,     M,        SPC \
+    //|---+------+------+------+------+------+------+------+------+------+------+------|
+        CTLTB,     A,     S,     D,     F,     G,     H,     J,     K,     L,       ENT,\
+    //|------+------+------+------+------+------+------+------+------+------+          |
+           SFTESC,  ALTZ, LCMDX,     C,  LOWV,     B,  RAIN,     M,        SPC          \
     //|----------+------+------+------+------+------+------+------+-----------+--------|
   ),
-  [_NUMS] = LAYOUT_kc(
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 0, GRV,
-    _____, LBRC, RBRC, SLSH, BSLS, _____, MINS, EQL, SCLN, QUOT, _____,
-    _____, _____, _____, _____, _____, _____, _____, COMM, DOT
+  [_LOWER] = LAYOUT_kc(
+        //|----------------------------------------------------------------------------.
+                1,     2,     3,     4,     5,     6,     7,     8,     9,     0,   GRV,\
+    //|---+------+------+------+------+------+------+------+------+------+------+------|
+       CTL_TB,  LBRC,  RBRC,  SLSH,  BSLS, _____,  MINS,   EQL,  SCLN,  QUOT,     _____,\
+    //|------+------+------+------+------+------+------+------+------+------+          |
+            _____, _____, _____, _____, _____, _____, _____,  COMM,        DOT          \
+    //|----------+------+------+------+------+------+------+------+-----------+--------|
   ),
-  [_SYMS] = LAYOUT_kc(
-    EXLM, AT, HASH, DLR, PERC, CIRC, AMPR, ASTR, LPRN, RPRN, TILD,
-    _____, LCBR, RCBR, QUES, PIPE, _____, UNDS, PLUS, COLN, DQUO, _____,
-    _____, LABK, RABK, _____, _____, _____, _____, _____, _____
+  [_RAISE] = LAYOUT_kc(
+        //|----------------------------------------------------------------------------.
+             EXLM,    AT,  HASH,   DLR,  PERC,  CIRC,  AMPR,  ASTR,  LPRN,  RPRN,  TILD,\
+    //|---+------+------+------+------+------+------+------+------+------+------+------|
+        _____,  LCBR,  RCBR,  QUES,  PIPE, _____,  UNDS,  PLUS,  COLN,  DQUO,     _____,\
+    //|------+------+------+------+------+------+------+------+------+------+          |
+            _____,  LABK,  RABK, _____, _____, _____, _____, _____,      _____          \
+    //|----------+------+------+------+------+------+------+------+-----------+--------|
   ),
-  [_FUNC] = LAYOUT_kc(
-    ESC, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10,
-    TAB, VOLU, VOLD, MUTE, _____, _____, LEFT, DOWN, UP, RGHT, RST,
-    _____, LALT, LGUI, _____, _____, _____, _____, _____, _____
+  [_ADJUST] = LAYOUT_kc(
+        //|----------------------------------------------------------------------------.
+              ESC,    F1,    F2,    F3,    F4,    F5,    F6,    F7,    F8,    F9,   F10,\
+    //|---+------+------+------+------+------+------+------+------+------+------+------|
+          TAB,  VOLU,  VOLD,  MUTE, _____, _____,  LEFT,  DOWN,    UP,  RGHT,       RST,\
+    //|------+------+------+------+------+------+------+------+------+------+          |
+            _____,  LALT,  LGUI, _____, _____, _____, _____, _____,      _____          \
+    //|----------+------+------+------+------+------+------+------+-----------+--------|
   )
 };
+
+void persistent_default_layer_set(uint16_t default_layer) {
+  eeconfig_update_default_layer(default_layer);
+  default_layer_set(default_layer);
+}
+
+static bool lower_pressed = false;
+static bool raise_pressed = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case QWERTY:
+      if (record->event.pressed) {
+        persistent_default_layer_set(1UL<<_QWERTY);
+      }
+      return false;
+      break;
+    case LOWER_V:
+      if (record->event.pressed) {
+        lower_pressed = true;
+        layer_on(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+
+        if (lower_pressed) {
+          register_code(KC_V);
+          unregister_code(KC_V);
+        }
+        lower_pressed = false;
+      }
+      return false;
+      break;
+    case RAISE_N:
+      if (record->event.pressed) {
+        raise_pressed = true;
+        layer_on(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+
+        if (raise_pressed) {
+          register_code(KC_N);
+          unregister_code(KC_N);
+        }
+        raise_pressed = false;
+      }
+      return false;
+      break;
+    case ADJUST:
+      if (record->event.pressed) {
+        layer_on(_ADJUST);
+      } else {
+        layer_off(_ADJUST);
+      }
+      return false;
+      break;
+    default:
+      if (record->event.pressed) {
+        lower_pressed = false;
+        raise_pressed = false;
+      }
+      break;
+  }
+  return true;
+}
