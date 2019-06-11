@@ -38,7 +38,7 @@ enum custom_keycodes {
 #define KC_CTL_TB LCTL(KC_TAB)
 #define KC_SFTESC SFT_T(KC_ESC)
 #define KC_ALTZ   ALT_T(KC_Z)
-#define KC_LGUIX  LGUI_T(KC_X)
+#define KC_LGUIC  LGUI_T(KC_C)
 #define KC_RGUIM  RGUI_T(KC_M)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -48,14 +48,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|---+------+------+------+------+------+------+------+------+------+------+------|
         CTLTB,     A,     S,     D,     F,     G,     H,     J,     K,     L,       ENT,\
     //|------+------+------+------+------+------+------+------+------+------+          |
-           SFTESC,  ALTZ, LGUIX,     C,  LOWV,     B,  RAIN, RGUIM,        SPC          \
+           SFTESC,  ALTZ,     X, LGUIC,  LOWV,     B,  RAIN, RGUIM,        SPC          \
     //|----------+------+------+------+------+------+------+------+-----------+--------|
   ),
   [_LOWER] = LAYOUT_kc(
         //|----------------------------------------------------------------------------.
-                1,     2,     3,     4,     5,     6,     7,     8,     9,     0,   GRV,\
+                1,     2,     3,     4,     5,     6,     7,     8,     9,     0, _____,\
     //|---+------+------+------+------+------+------+------+------+------+------+------|
-       CTL_TB,  LBRC,  RBRC,  SLSH,  BSLS, _____,  MINS,   EQL,  SCLN,  QUOT,     _____,\
+       CTL_TB,  LBRC,  RBRC,  SLSH,  BSLS,   GRV,  MINS,   EQL,  SCLN,  QUOT,     _____,\
     //|------+------+------+------+------+------+------+------+------+------+          |
             _____, _____, _____, _____, _____, _____, _____,  COMM,        DOT          \
     //|----------+------+------+------+------+------+------+------+-----------+--------|
