@@ -24,12 +24,14 @@ extern uint8_t is_master;
 #define _QWERTY 0
 #define _LOWER 3
 #define _RAISE 4
+#define _FUNC 5
 #define _ADJUST 16
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
+  FUNC,
   ADJUST,
   BACKLIT,
   RGBRST
@@ -43,6 +45,7 @@ enum macro_keycodes {
 #define KC_XXXXX KC_NO
 #define KC_LOWER LOWER
 #define KC_RAISE RAISE
+#define KC_FUNC  FUNC
 #define KC_RST   RESET
 
 #define KC_LRST  RGBRST
@@ -76,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
       CTLTB,     A,     S,     D,     F,     G,                      H,     J,     K,     L,  SCLN,  QUOT,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-       LSFT,  ZALT,     X,     C,     V,     B,                      N,     M,  COMM,   DOT,  SLSH,   GRV,\
+       LSFT,  ZALT,     X,     C,     V,     B,                      N,     M,  COMM,   DOT,  SLSH,  FUNC,\
   //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
                                    LGUI, LOWER,   SPC,    SFTEN, RAISE,  RGUI \
                               //`--------------------'  `--------------------'
@@ -86,9 +89,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------.                ,-----------------------------------------.
       _____,     1,     2,     3,     4,     5,                      6,     7,     8,     9,     0, _____,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-     CTL_TB,  EXLM,    AT,  HASH,   DLR,  PERC,                   CIRC,  AMPR,  ASTR,  LPRN,  RPRN,  TILD,\
+     CTL_TB,    F1,    F2,    F3,    F4,    F5,                     F6,    F7,    F8,    F9,   F10,   F11,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____, _____,  LBRC,  RBRC,  LCBR,  RCBR,                   MINS,  UNDS,   EQL,  PLUS,  BSLS,  PIPE,\
+      _____, _____, _____, _____, _____, _____,                  _____, _____, _____, _____, _____,   F12,\
   //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
                                   _____, _____, _____,    _____, _____, _____ \
                               //`--------------------'  `--------------------'
@@ -96,11 +99,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_RAISE] = LAYOUT_kc( \
   //,-----------------------------------------.                ,-----------------------------------------.
-      _____,    F1,    F2,    F3,    F4,    F5,                  _____, _____,    UP, _____, _____,   DEL,\
+      _____,  EXLM,    AT,  HASH,   DLR,  PERC,                   CIRC,  AMPR,  ASTR,  LPRN,  RPRN, _____,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____,    F6,    F7,    F8,    F9,   F10,                  _____,  LEFT,  RGHT, _____, _____, _____,\
+      _____, _____, _____, _____, _____, _____,                   UNDS,  PLUS,  LCBR,  RCBR,  PIPE,  TILD,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____, _____, _____, _____,   F11,   F12,                  _____,  DOWN, _____, _____, _____, _____,\
+      _____, _____, _____, _____, _____, _____,                   MINS,   EQL,  LBRC,  RBRC,  BSLS,   GRV,\
+  //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
+                                  _____, _____, _____,    _____, _____, _____ \
+                              //`--------------------'  `--------------------'
+  ),
+
+  [_FUNC] = LAYOUT_kc( \
+  //,-----------------------------------------.                ,-----------------------------------------.
+      _____, _____, _____, _____, _____, _____,                  _____, _____, _____,    UP, _____,   DEL,\
+  //|------+------+------+------+------+------|                |------+------+------+------+------+------|
+      _____,  VOLD,  VOLU,  MUTE, _____, _____,                  _____, _____,  LEFT,  RGHT, _____, _____,\
+  //|------+------+------+------+------+------|                |------+------+------+------+------+------|
+      _____, _____, _____, _____, _____, _____,                  _____, _____,  DOWN, _____, _____, _____,\
   //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
                                   _____, _____, _____,    _____, _____, _____ \
                               //`--------------------'  `--------------------'
@@ -179,9 +194,6 @@ void iota_gfx_task_user(void) {
 }
 #endif//SSD1306OLED
 
-static bool lower_pressed = false;
-static bool raise_pressed = false;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
 #ifdef SSD1306OLED
@@ -199,35 +211,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     case LOWER:
       if (record->event.pressed) {
-        lower_pressed = true;
         layer_on(_LOWER);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_LOWER);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
-
-        if (lower_pressed) {
-          register_code(KC_LANG2);
-          unregister_code(KC_LANG2);
-        }
-        lower_pressed = false;
       }
       return false;
       break;
     case RAISE:
       if (record->event.pressed) {
-        raise_pressed = true;
         layer_on(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
-
-        if (raise_pressed) {
-          register_code(KC_LANG1);
-          unregister_code(KC_LANG1);
-        }
-        raise_pressed = false;
+      }
+      return false;
+      break;
+    case FUNC:
+      if (record->event.pressed) {
+        layer_on(_FUNC);
+      } else {
+        layer_off(_FUNC);
       }
       return false;
       break;
@@ -248,10 +254,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       #endif
       break;
     default:
-      if (record->event.pressed) {
-        lower_pressed = false;
-        raise_pressed = false;
-      }
+    //   if (record->event.pressed) {
+    //   }
       break;
   }
   return true;
