@@ -24,16 +24,14 @@ extern keymap_config_t keymap_config;
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
-  LOWER_V,
-  RAISE_N,
   FUNC_ENT
 };
 
 #define KC______  KC_TRNS
 #define KC_XXXXX  KC_NO
 #define KC_RST    RESET
-#define KC_LOWV   LOWER_V
-#define KC_RAIN   RAISE_N
+#define KC_LOWV   LT(_LOWER, KC_V)
+#define KC_RAIN   LT(_RAISE, KC_N)
 #define KC_FNCENT FUNC_ENT
 #define KC_CTLTB  CTL_T(KC_TAB)
 #define KC_CTL_TB LCTL(KC_TAB)
@@ -72,11 +70,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_FUNC] = LAYOUT_kc(
         //|----------------------------------------------------------------------------.
-              RST, _____, _____, _____, _____, _____, _____,    UP, _____, _____,   DEL,\
+            _____, _____, _____, _____, _____, _____, _____,    UP, _____, _____,   DEL,\
     //|---+------+------+------+------+------+------+------+------+------+------+------|
         _____,  VOLD,  VOLU,  MUTE, _____, _____, _____,  LEFT,  RGHT, _____,     _____,\
     //|------+------+------+------+------+------+------+------+------+------+          |
-            _____, _____, _____, _____, _____, _____, _____,  DOWN,      _____          \
+              RST, _____, _____, _____, _____, _____, _____,  DOWN,      _____          \
     //|----------+------+------+------+------+------+------+------+-----------+--------|
   )
 };
@@ -86,8 +84,6 @@ void persistent_default_layer_set(uint16_t default_layer) {
   default_layer_set(default_layer);
 }
 
-static bool lower_pressed = false;
-static bool raise_pressed = false;
 static bool func_pressed = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -95,34 +91,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case QWERTY:
       if (record->event.pressed) {
         persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-      break;
-    case LOWER_V:
-      if (record->event.pressed) {
-        lower_pressed = true;
-        layer_on(_LOWER);
-      } else {
-        layer_off(_LOWER);
-        if (lower_pressed) {
-          register_code(KC_V);
-          unregister_code(KC_V);
-        }
-        lower_pressed = false;
-      }
-      return false;
-      break;
-    case RAISE_N:
-      if (record->event.pressed) {
-        raise_pressed = true;
-        layer_on(_RAISE);
-      } else {
-        layer_off(_RAISE);
-        if (raise_pressed) {
-          register_code(KC_N);
-          unregister_code(KC_N);
-        }
-        raise_pressed = false;
       }
       return false;
       break;
@@ -142,8 +110,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
     default:
       if (record->event.pressed) {
-        lower_pressed = false;
-        raise_pressed = false;
         func_pressed = false;
       }
       break;
