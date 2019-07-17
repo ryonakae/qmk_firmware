@@ -1,1 +1,1 @@
-# The default keymap for ak62
+# The default keymap for AK62

@@ -15,49 +15,73 @@
  */
 #include QMK_KEYBOARD_H
 
-// Defines the keycodes used by our macros in process_record_user
+extern keymap_config_t keymap_config;
+
+#define _QWERTY 0
+#define _FUNC 1
+
 enum custom_keycodes {
-  QMKBEST = SAFE_RANGE,
-  QMKURL
+  QWERTY = SAFE_RANGE,
+  FUNC
 };
 
+#define KC______ KC_TRNS
+#define KC_XXXXX KC_NO
+#define KC_FNC   FUNC
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT( /* Base */
-    KC_A,  KC_1,  KC_H, \
-      KC_TAB,  KC_SPC   \
+  [_QWERTY] = LAYOUT_kc(
+    //|--------------------------------------------------------------------------------.
+          ESC,     1,     2,     3,     4,     5,     6,     7,     8,     9,     0,  MINS,   EQL,     BSPC,\
+    //|------+------+------+------+------+------+------+------+------+------+------+------+------+---------|
+             TAB,     Q,     W,     E,     R,     T,     Y,     U,     I,     O,     P,  LBRC,  RBRC,   ENT,\
+    //|---------+------+------+------+------+------+------+------+------+------+------+------+------+      |
+             LCTRL,     A,     S,     D,     F,     G,     H,     J,     K,     L,  SCLN,  QUOT,            \
+    //|-----------+------+------+------+------+------+------+------+------+------+------+------+-----------|
+                 LSFT,     Z,     X,     C,     V,     B,     N,     M,  COMM,   DOT,  SLSH,           RSFT,\
+    //|--------------+------+------+------+------+------+------+------+------+------+------+---------------|
+          FNC,  LALT,      LGUI,   GRV,                              SPC,  BSLS,  LEFT,  DOWN,    UP,  RGHT \
+    //|------+------+----------+------+---------------------------------+------+------+------+------+------|
+  ),
+  [_FUNC] = LAYOUT_kc(
+    //|--------------------------------------------------------------------------------.
+        _____,    F1,    F2,    F3,    F4,    F5,    F6,    F7,    F8,    F9,   F10,   F11,   F12,      DEL,\
+    //|------+------+------+------+------+------+------+------+------+------+------+------+------+---------|
+           _____, _____, _____, _____, _____, _____, _____, _____, _____, _____, _____, _____, _____,RETURN,\
+    //|---------+------+------+------+------+------+------+------+------+------+------+------+------+      |
+             _____,  VOLD,  VOLU,  MUTE, _____, _____, _____, _____, _____, _____, _____, _____,            \
+    //|-----------+------+------+------+------+------+------+------+------+------+------+------+-----------|
+                _____, _____, _____, _____, _____, _____, _____, _____, _____, _____, _____,          _____,\
+    //|--------------+------+------+------+------+------+------+------+------+------+------+---------------|
+        _____, _____,     _____, _____,                            _____, _____, _____, _____, _____, _____ \
+    //|------+------+----------+------+---------------------------------+------+------+------+------+------|
   ),
 };
 
+void persistent_default_layer_set(uint16_t default_layer) {
+  eeconfig_update_default_layer(default_layer);
+  default_layer_set(default_layer);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case QMKBEST:
+    case QWERTY:
       if (record->event.pressed) {
-        // when keycode QMKBEST is pressed
-        SEND_STRING("QMK is the best thing ever!");
-      } else {
-        // when keycode QMKBEST is released
+        persistent_default_layer_set(1UL<<_QWERTY);
       }
+      return false;
       break;
-    case QMKURL:
+    case FUNC:
       if (record->event.pressed) {
-        // when keycode QMKURL is pressed
-        SEND_STRING("https://qmk.fm/" SS_TAP(X_ENTER));
+        layer_on(_FUNC);
       } else {
-        // when keycode QMKURL is released
+        layer_off(_FUNC);
       }
+      return false;
+      break;
+    default:
       break;
   }
   return true;
-}
-
-void matrix_init_user(void) {
-
-}
-
-void matrix_scan_user(void) {
-
-}
-
-void led_set_user(uint8_t usb_led) {
-
 }
