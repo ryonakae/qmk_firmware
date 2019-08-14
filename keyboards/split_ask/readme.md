@@ -1,15 +1,11 @@
-# split_ask
+# Split ASK
 
-![split_ask](imgur.com image replace me!)
+Split 60% Apple Standard Keyboard (M0116)
 
-A short description of the keyboard/project
+* [GitHub](https://github.com/ryonakae/split-ask)
+* [Keyboard Layout Editor](http://www.keyboard-layout-editor.com/#/gists/5afcbd86697c04077fe7bd14d1941138)
 
-Keyboard Maintainer: [Ryo Nakae](https://github.com/yourusername)  
-Hardware Supported: The PCBs, controllers supported  
-Hardware Availability: links to where you can find this hardware
-
-Make example for this keyboard (after setting up your build environment):
-
-    make split_ask:default
-
-See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
+## Build and flash
+```
+$ make split_ask:default:avrdude
+```
