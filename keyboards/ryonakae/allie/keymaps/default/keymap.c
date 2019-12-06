@@ -21,56 +21,23 @@ enum layer_names {
     _FN
 };
 
-// Defines the keycodes used by our macros in process_record_user
-enum custom_keycodes {
-    QMKBEST = SAFE_RANGE,
-    QMKURL
-};
+#define KC______ KC_TRNS
+#define KC_XXXXX KC_NO
+#define KC_FN    MO(_FN)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    /* Base */
-    [_BASE] = LAYOUT(
-        KC_A,    KC_1,    MO(_FN),
-            KC_TAB,   KC_SPC
+    [_BASE] = LAYOUT_kc(
+        ESC, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, MINS, EQL, BSLS, GRV,
+        TAB, Q, W, E, R, T, Y, U, I, O, P, LBRC, RBRC, BSPC,
+        LCTRL, A, S, D, F, G, H, J, K, L, SCLN, QUOT, ENT,
+        LSFT,Z, X, C, V, B, N, M, COMM, DOT, SLSH, RSFT, FN,
+        LALT,  LGUI, SPACE, SPACE, SPACE, RGUI, RALT
     ),
-    [_FN] = LAYOUT(
-        QMKBEST, QMKURL,  _______,
-            RESET,    XXXXXXX
+    [_FN] = LAYOUT_kc(
+        POWER, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, INS, DEL,
+        _____, _____, _____, _____, _____, _____, _____, _____, PSCR, SLCK, PAUS, UP, _____, CLR,
+        _____, VOLD, VOLU, MUTE, EJCT, _____, PAST, PSLS, HOME, PGUP, LEFT, RGHT, PENT,
+        _____, _____, _____, _____, _____, _____, PPLS, PMNS, END, PGDN, DOWN, _____, _____,
+        _____, _____, _____, _____, _____, _____, _____
     )
 };
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case QMKBEST:
-            if (record->event.pressed) {
-                // when keycode QMKBEST is pressed
-                SEND_STRING("QMK is the best thing ever!");
-            } else {
-                // when keycode QMKBEST is released
-            }
-            break;
-        case QMKURL:
-            if (record->event.pressed) {
-                // when keycode QMKURL is pressed
-                SEND_STRING("https://qmk.fm/\n");
-            } else {
-                // when keycode QMKURL is released
-            }
-            break;
-    }
-    return true;
-}
-
-/*
-void matrix_init_user(void) {
-
-}
-
-void matrix_scan_user(void) {
-
-}
-
-bool led_update_user(led_t led_state) {
-    return true;
-}
-*/

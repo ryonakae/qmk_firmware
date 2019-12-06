@@ -1,1 +1,1 @@
-# The default keymap for allie
+# The default keymap for Allie
