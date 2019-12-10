@@ -23,7 +23,6 @@ enum layer_names {
 
 #define KC______ KC_TRNS
 #define KC_XXXXX KC_NO
-#define KC_SFTEN SFT_T(KC_ENT)
 #define KC_FN    MO(_FN)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -37,7 +36,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|-----------+------+------+------+------+------|       |------+------+------+------+------+------+---------------|
                  LSFT,     Z,     X,     C,     V,     B,             N,     M,  COMM,   DOT,  SLSH,        RSFT,    FN,\
     //`--------------+------+------+------+------+------|       |------+------+------+------+------+------------+------'
-                      LALT,     LGUI,                SPC,    SFTEN,     SPC,     RGUI,  RALT \
+                      LALT,     LGUI,                SPC,     RSFT,     SPC,     RGUI,  RALT \
                  //`------+---------+-------------------'  `------+--------+---------+------'
     ),
     [_FN] = LAYOUT_kc(
