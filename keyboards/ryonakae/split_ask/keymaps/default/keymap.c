@@ -15,24 +15,18 @@
  */
 #include QMK_KEYBOARD_H
 
-extern keymap_config_t keymap_config;
-
-#define _QWERTY 0
-#define _FUNC 1
-
-// Defines the keycodes used by our macros in process_record_user
-enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  FUNC
+// Defines names for use in layer keycodes and the keymap
+enum layer_names {
+    _BASE,
+    _FN
 };
 
 #define KC______ KC_TRNS
 #define KC_XXXXX KC_NO
-#define KC_SFTEN SFT_T(KC_ENT)
-#define KC_FNC   FUNC
+#define KC_FN    MO(_FN)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_QWERTY] = LAYOUT_kc(
+  [_BASE] = LAYOUT_kc(
     //|-----------------------------------------.            ,----------------------------------------------------------.
           ESC,     1,     2,     3,     4,     5,                  6,     7,     8,     9,     0,  MINS,   EQL,     BSPC,\
     //|------+------+------+------+------+------|            |------+------+------+------+------+------+------+---------|
@@ -40,49 +34,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|---------+------+------+------+------+------|            |------+------+------+------+------+------+------+      |
              LCTRL,     A,     S,     D,     F,     G,                  H,     J,     K,     L,  SCLN,  QUOT,            \
     //|-----------+------+------+------+------+------|            |------+------+------+------+------+------+-----------|
-                 LSFT,     Z,     X,     C,     V,     B,                  N,     M,  COMM,   DOT,  SLSH,            FNC,\
+                 LSFT,     Z,     X,     C,     V,     B,                  N,     M,  COMM,   DOT,  SLSH,             FN,\
     //|--------------+------+------+------+------+------|--------.   |------+------+------+------+------+---------------|
-         LCAP,  LALT,      LGUI,                              SPC,              SFTEN,  RGUI,  LEFT,  DOWN,    UP,  RGHT \
+         LCAP,  LALT,      LGUI,                              SPC,               RGUI,  BSLS,  LEFT,  DOWN,    UP,  RGHT \
     //|------+------+----------+---------------------------------'            `------+------+------+------+------+------.
   ),
-  [_FUNC] = LAYOUT_kc(
+  [_FN] = LAYOUT_kc(
     //|-----------------------------------------.            ,----------------------------------------------------------.
         _____,    F1,    F2,    F3,    F4,    F5,                 F6,    F7,    F8,    F9,   F10,   F11,   F12,      DEL,\
     //|------+------+------+------+------+------|            |------+------+------+------+------+------+------+---------|
-           _____, _____, _____, _____, _____, _____,              _____, _____, _____, _____, _____, _____, _____,RETURN,\
+           _____, _____, _____, _____, _____, _____,              _____, _____, _____, _____, _____, _____, _____,  PENT,\
     //|---------+------+------+------+------+------|            |------+------+------+------+------+------+------+      |
-             _____,  VOLD,  VOLU,  MUTE, _____, _____,              _____, _____, _____, _____, _____, _____,            \
+             _____,  VOLD,  VOLU,  MUTE,  EJCT, _____,              _____, _____, _____, _____, _____, _____,            \
     //|-----------+------+------+------+------+------|            |------+------+------+------+------+------+-----------|
                 _____, _____, _____, _____, _____, _____,              _____, _____, _____, _____, _____,          _____,\
     //|--------------+------+------+------+------+------|--------.   |------+------+------+------+------+---------------|
-        _____, _____,     _____,                            _____,                GRV,  BSLS, _____, _____, _____, _____ \
+        _____, _____,     _____,                            _____,                GRV, _____, _____, _____, _____, _____ \
     //|------+------+----------+---------------------------------'            `------+------+------+------+------+------.
   ),
 };
-
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-      break;
-    case FUNC:
-      if (record->event.pressed) {
-        layer_on(_FUNC);
-      } else {
-        layer_off(_FUNC);
-      }
-      return false;
-      break;
-    default:
-      break;
-  }
-  return true;
-}
