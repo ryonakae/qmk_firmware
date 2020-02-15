@@ -7,5 +7,5 @@ Split 60% Apple Standard Keyboard (M0116)
 
 ## Build and flash
 ```
-$ make split_ask:default:avrdude
+$ make ryonakae/split_ask:default:avrdude
 ```
