@@ -19,14 +19,20 @@
 // You can leave any or all of these undefined.
 // These are only required if you want to perform custom actions.
 
-/*
-
 void matrix_init_kb(void) {
   // put your keyboard start-up code here
   // runs once when the firmware starts up
 
-  matrix_init_user();
+  // matrix_init_user();
+
+  // Turn off LEDs of Pro Micro
+  DDRD &= ~(1 << 5);
+  PORTD &= ~(1 << 5);
+  DDRB &= ~(1 << 0);
+  PORTB &= ~(1 << 0);
 }
+
+/*
 
 void matrix_scan_kb(void) {
   // put your looping keyboard code here
