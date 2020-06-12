@@ -15,14 +15,12 @@ extern uint8_t is_master;
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
-#define _FUNC 3
 #define _ADJUST 4
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
-  FUNC,
   ADJUST,
   BACKLIT,
   RGBRST
@@ -36,7 +34,6 @@ enum macro_keycodes {
 #define KC_XXXXX KC_NO
 #define KC_LOWER LOWER
 #define KC_RAISE RAISE
-#define KC_FUNC  FUNC
 #define KC_RST   RESET
 
 #define KC_LRST  RGBRST
@@ -70,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
       CTLTB,     A,     S,     D,     F,     G,                      H,     J,     K,     L,  SCLN,  QUOT,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-       LSFT,  ZALT,     X,     C,     V,     B,                      N,     M,  COMM,   DOT,  SLSH,  FUNC,\
+       LSFT,  ZALT,     X,     C,     V,     B,                      N,     M,  COMM,   DOT,  SLSH,   GRV,\
   //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
                                    LGUI, LOWER,   SPC,    SFTEN, RAISE,  RGUI \
                               //`--------------------'  `--------------------'
@@ -92,21 +89,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------.                ,-----------------------------------------.
       _____,  EXLM,    AT,  HASH,   DLR,  PERC,                   CIRC,  AMPR,  ASTR,  LPRN,  RPRN, _____,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____, _____, _____, _____, _____, _____,                   UNDS,  PLUS,  LCBR,  RCBR,  PIPE,  TILD,\
+      _____, _____, _____, _____, _____, _____,                   LEFT,  DOWN,    UP,  RGHT, _____, _____,\
   //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____, _____, _____, _____, _____, _____,                   MINS,   EQL,  LBRC,  RBRC,  BSLS,   GRV,\
-  //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
-                                  _____, _____, _____,    _____, _____, _____ \
-                              //`--------------------'  `--------------------'
-  ),
-
-  [_FUNC] = LAYOUT_kc( \
-  //,-----------------------------------------.                ,-----------------------------------------.
-      _____, _____, _____, _____, _____, _____,                  _____, _____, _____,    UP, _____,   DEL,\
-  //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____,  VOLD,  VOLU,  MUTE, _____, _____,                  _____, _____,  LEFT,  RGHT, _____, _____,\
-  //|------+------+------+------+------+------|                |------+------+------+------+------+------|
-      _____, _____, _____, _____, _____, _____,                  _____, _____,  DOWN, _____, _____, _____,\
+      _____,  PIPE,  LCBR,  RCBR,  PLUS,  UNDS,                   MINS,   EQL,  LBRC,  RBRC,  BSLS, _____,\
   //|------+------+------+------+------+------+------|  |------+------+------+------+------+------+------|
                                   _____, _____, _____,    _____, _____, _____ \
                               //`--------------------'  `--------------------'
@@ -229,13 +214,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         layer_off(_RAISE);
         update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-    case FUNC:
-      if (record->event.pressed) {
-        layer_on(_FUNC);
-      } else {
-        layer_off(_FUNC);
       }
       return false;
     case ADJUST:
